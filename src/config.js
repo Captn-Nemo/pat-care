@@ -1,0 +1,32 @@
+export default {
+  defaultPath: "/auth",
+  basename: "/", // only at build time to set, like /datta-able
+  layout: "vertical", // vertical, horizontal (not available in lite version)
+  preLayout: "layout-6", // (not available in lite version)
+  collapseMenu: false, // mini-menu
+  layoutType: "menu-dark", // menu-dark, (menu-light, dark are not available in lite version)
+  navIconColor: true,
+  headerBackColor: "header-default", // header-default, (header-blue, header-red, header-purple, header-lightblue, header-dark are not available in lite version)
+  navBackColor: "navbar-default", // navbar-default, (navbar-blue, navbar-red, navbar-purple, navbar-lightblue, navbar-dark are not available in lite version)
+  navBrandColor: "brand-default", // brand-default, (brand-blue, brand-red, brand-purple, brand-lightblue, brand-dark are not available in lite version)
+  navBackImage: false, // not available in lite version
+  rtlLayout: false, // not available in lite version
+  navFixedLayout: true,
+  headerFixedLayout: false, // not available in lite version
+  boxLayout: false,
+  navDropdownIcon: "style1", // style1, (style2, style3 are not available in lite version)
+  navListIcon: "style1", // style1, (style2, style3, style4, style5, style6 are not available in lite version)
+  navActiveListColor: "active-default", // active-default, (active-blue, active-red, active-purple, active-lightblue, active-dark are not available in lite version)
+  navListTitleColor: "title-default", // title-default, (title-blue, title-red, title-purple, title-lightblue, title-dark are not available in lite version)
+  navListTitleHide: false, // not available in lite version
+  configBlock: false, // not available in lite version
+  layout6Background:
+    "linear-gradient(90deg, rgba(109,108,125,1) 0%, rgba(94,94,122,1) 47%, rgba(74,91,94,1) 100%)", // used only for pre-layout = layout-6
+  layout6BackSize: "", // used only for pre-layout = layout-6
+
+  // Roles
+  currentRole: "PATIENT",
+  NCID: "00000",
+  LABID: "00001",
+  FOODID: "00002",
+};

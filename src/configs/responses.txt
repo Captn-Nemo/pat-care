@@ -1,0 +1,414 @@
+APIresponses = Api
+
+/api/AssignedRooms
+[
+  {
+    "Id": 1,
+    "NursingStationId": 1,
+    "RoomId": 1,
+    "AssignedDate": "2022-02-24T00:00:00",
+    "AssignedBy": 1,
+    "Name": "101",
+    "Code": "101",
+    "CategoryName": "A/C",
+    "CategoryCode": "A/C",
+    "Floor": 1,
+    "Section": "Block A",
+    "NursingStations": "Nursing Station 1",
+    "PatientDetails": "Patient Name : MohanLal~ UHID: 12345678901~ IP No: IP001~ Mobile No: 9995672068"
+  },
+  {
+    "Id": 2,
+    "NursingStationId": 1,
+    "RoomId": 2,
+    "AssignedDate": "2022-02-24T00:00:00",
+    "AssignedBy": 1,
+    "Name": "102",
+    "Code": "102",
+    "CategoryName": "A/C",
+    "CategoryCode": "A/C",
+    "Floor": 1,
+    "Section": "Block A",
+    "NursingStations": "Nursing Station 1",
+    "PatientDetails": "Patient Name : Mammotty~ UHID: 12345678902~ IP No: IP002~ Mobile No: 9995672069"
+  },
+  {
+    "Id": 3,
+    "NursingStationId": 1,
+    "RoomId": 3,
+    "AssignedDate": "2022-02-20T00:00:00",
+    "AssignedBy": 1,
+    "Name": "103",
+    "Code": "103",
+    "CategoryName": "A/C",
+    "CategoryCode": "A/C",
+    "Floor": 1,
+    "Section": "Block A",
+    "NursingStations": "Nursing Station 1",
+    "PatientDetails": "Patient Name : Sumalatha~ UHID: 12345678903~ IP No: IP003~ Mobile No: Mobile of Sumalatha"
+  },
+  {
+    "Id": 4,
+    "NursingStationId": 2,
+    "RoomId": 4,
+    "AssignedDate": "2022-02-15T00:00:00",
+    "AssignedBy": 1,
+    "Name": "104",
+    "Code": "104",
+    "CategoryName": "A/C",
+    "CategoryCode": "A/C",
+    "Floor": 1,
+    "Section": "Block A",
+    "NursingStations": "Nursing Station 2",
+    "PatientDetails": null
+  },
+  {
+    "Id": 5,
+    "NursingStationId": 2,
+    "RoomId": 5,
+    "AssignedDate": "2022-01-24T00:00:00",
+    "AssignedBy": 1,
+    "Name": "105",
+    "Code": "105",
+    "CategoryName": "Non A/C",
+    "CategoryCode": "Non A/C",
+    "Floor": 1,
+    "Section": "Block B",
+    "NursingStations": "Nursing Station 2",
+    "PatientDetails": null
+  },
+  {
+    "Id": null,
+    "NursingStationId": null,
+    "RoomId": null,
+    "AssignedDate": null,
+    "AssignedBy": null,
+    "Name": "106",
+    "Code": "106",
+    "CategoryName": "Non A/C",
+    "CategoryCode": "Non A/C",
+    "Floor": 1,
+    "Section": "Block B",
+    "NursingStations": null,
+    "PatientDetails": null
+  },
+  {
+    "Id": null,
+    "NursingStationId": null,
+    "RoomId": null,
+    "AssignedDate": null,
+    "AssignedBy": null,
+    "Name": "107",
+    "Code": "107",
+    "CategoryName": "Non A/C",
+    "CategoryCode": "Non A/C",
+    "Floor": 2,
+    "Section": "Block C",
+    "NursingStations": null,
+    "PatientDetails": null
+  },
+  {
+    "Id": null,
+    "NursingStationId": null,
+    "RoomId": null,
+    "AssignedDate": null,
+    "AssignedBy": null,
+    "Name": "108",
+    "Code": "108",
+    "CategoryName": "Non A/C",
+    "CategoryCode": "Non A/C",
+    "Floor": 2,
+    "Section": "Block C",
+    "NursingStations": null,
+    "PatientDetails": null
+  }
+]
+
+
+booking API
+{
+  "id": 0,
+  "bystanderId": 0,
+  "patientId": 0,
+  "departmentId": 0,
+  "concerns": "string",
+  "severity": 0,
+  "voice": "string",
+  "statusId": 0
+}
+
+booking GeT
+[
+  {
+    "id": 0,
+    "bystanderId": 0,
+    "patientId": 0,
+    "departmentId": 0,
+    "concerns": "string",
+    "severity": 0,
+    "voice": "string",
+    "statusId": 0
+  }
+]
+
+Bystander Post
+{
+  "id": 0,
+  "patientId": 0,
+  "bystanderName": "string",
+  "phoneNo": "string",
+  "otp": "string",
+  "otpGenTime": "2022-03-13T17:34:13.989Z",
+  "otpExpTime": "2022-03-13T17:34:13.989Z",
+  "isOTPVerified": 0
+}
+
+Diet Header
+[
+  {
+    "Id": 1,
+    "DietHeaderId": 1,
+    "ItemId": 1
+  }
+]
+
+
+
+
+
+
+
+
+FoodOrder 
+
+
+
+{
+  "id": 0,
+  "roomId": 0,
+  "diningTime": 0,
+  "dietId": 0,
+  "forPatient": 0,
+  "arrayOfItems": [
+    {
+      "id": 0,
+      "headerId": 0,
+      "description": "string",
+      "itemId": 0,
+      "qty": 0
+    }
+  ]
+}
+
+
+bystandader
+
+{
+  "id": 0,
+  "patientId": 0,
+  "bystanderName": "string",
+  "phoneNo": "string",
+  "otp": "string",
+  "otpGenTime": "2022-03-13T18:03:21.700Z",
+  "otpExpTime": "2022-03-13T18:03:21.700Z",
+  "isOTPVerified": 0
+}
+
+-------------------------------------------------------------ADMIN API RESPONSES ------------------------------------------------------------------------------
+
+Employees
+{
+    "Id": 1,
+    "Code": "Roger",
+    "Name": "Roger R",
+    "Department": 1,
+    "NursingStation": 1,
+    "Designation": 1,
+    "Address": "Address of Roger",
+    "Photo": null,
+    "Remarks": null
+  },
+
+
+
+  Nursing stations 
+    {
+    "Id": 1,
+    "Code": "Nursing Station 1",
+    "Name": "Nursing Station 1",
+    "Notes": "Notes 1"
+  },
+  {
+    "Id": 2,
+    "Code": "Nursing Station 2",
+    "Name": "Nursing Station 2",
+    "Notes": "Notes 2"
+  }
+
+
+  Room Category 
+
+
+  [
+  {
+    "Id": 1,
+    "Code": "A/C",
+    "Name": "A/C",
+    "Notes": "Notes on A/C"
+  },
+  {
+    "Id": 2,
+    "Code": "Non A/C",
+    "Name": "Non A/C",
+    "Notes": "Notes on Non A/C"
+  },
+  {
+    "Id": 3,
+    "Code": "A/C Double Room",
+    "Name": "A/C Double Room",
+    "Notes": "A/C Double Room"
+  }
+]
+
+
+
+ROOMS
+
+[
+  {
+    "Id": 1,
+    "Code": "101",
+    "Name": "101",
+    "CategoryId": 1,
+    "Floor": 1,
+    "Section": "Block A",
+    "Notes": null
+  },
+  {
+    "Id": 2,
+    "Code": "102",
+    "Name": "102",
+    "CategoryId": 1,
+    "Floor": 1,
+    "Section": "Block A",
+    "Notes": null
+  },
+  {
+    "Id": 3,
+    "Code": "103",
+    "Name": "103",
+    "CategoryId": 1,
+    "Floor": 1,
+    "Section": "Block A",
+    "Notes": null
+  },
+  {
+    "Id": 4,
+    "Code": "104",
+    "Name": "104",
+    "CategoryId": 1,
+    "Floor": 1,
+    "Section": "Block A",
+    "Notes": null
+  },
+  {
+    "Id": 5,
+    "Code": "105",
+    "Name": "105",
+    "CategoryId": 2,
+    "Floor": 1,
+    "Section": "Block B",
+    "Notes": null
+  },
+  {
+    "Id": 6,
+    "Code": "106",
+    "Name": "106",
+    "CategoryId": 2,
+    "Floor": 1,
+    "Section": "Block B",
+    "Notes": null
+  },
+  {
+    "Id": 7,
+    "Code": "107",
+    "Name": "107",
+    "CategoryId": 2,
+    "Floor": 2,
+    "Section": "Block C",
+    "Notes": null
+  },
+  {
+    "Id": 8,
+    "Code": "108",
+    "Name": "108",
+    "CategoryId": 2,
+    "Floor": 2,
+    "Section": "Block C",
+    "Notes": null
+  }
+]
+
+
+FOOD FoodOrder
+[
+  {
+    "Id": 3,
+    "RoomId": 1,
+    "DiningTime": 1,
+    "DietId": 1,
+    "ForPatient": 1,
+    "Room": "101",
+    "DiningTimings": "BreakFast",
+    "Diet": "Sugar Patient BF"
+  }
+]
+
+
+
+DIET Header
+
+[
+  {
+    "Id": 1,
+    "Code": "Sugar Patient BF",
+    "Name": "Sugar Patient BF",
+    "DiningTime": 1,
+    "DiningTimings": "BreakFast",
+    "ItemCode": "Idly",
+    "ItemName": "Idly"
+  }
+]
+
+
+DIET HEADER with ID 
+{
+    "Id": 1,
+    "Code": "Sugar Patient BF",
+    "Name": "Sugar Patient BF",
+    "DiningTime": 1
+  }
+
+
+
+  DIET DETSILSDS 
+
+
+  [
+  {
+    "Id": 2,
+    "DietHeaderId": 1,
+    "ItemId": 2
+  }
+]
+
+
+ASSIGN ROOMS
+
+{
+  "id": 0,
+  "nursingStationId": 0,
+  "roomId": 0,
+  "assignedDate": "2022-03-14T17:29:55.146Z",
+  "assignedBy": 0
+}

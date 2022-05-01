@@ -1,0 +1,59 @@
+.button-card {
+  height: 6rem;
+  margin: 0.3rem;
+  box-shadow: 2px 2px 2px rgb(163, 162, 162);
+  border-radius: 5px;
+}
+
+.button-card:hover {
+  cursor: pointer;
+  padding-right: 24px;
+  padding-left: 8px;
+  box-shadow: 2px 2px 2px rgb(59, 59, 59);
+  transition: 0.3s;
+}
+
+.button-card:hover:after {
+  opacity: 1;
+  right: 10px;
+}
+.img-thumb {
+  width: 5.5rem;
+  height: 5rem;
+}
+.food-thumb {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 10px;
+}
+.foodlist-thumb {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+}
+.emoji {
+  border-radius: 5px;
+}
+.emoji:hover {
+  background-color: #f4f7fa;
+}
+
+.emoji-selected {
+  background-color: #babbbd;
+  border-radius: 5px;
+}
+
+.foodBtnLeft {
+  border-radius: 1.5rem 0 0 1.5rem !important;
+  height: 2.2rem !important;
+  color: rgb(70, 34, 34);
+}
+.foodBtnRight {
+  border-radius: 0 1.5rem 1.5rem 0 !important;
+  color: rgb(70, 34, 34);
+  height: 2.2rem !important;
+  margin-left: 0.5rem;
+}
+.myTab {
+  background: transparent !important;
+}

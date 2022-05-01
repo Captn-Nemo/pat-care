@@ -1,0 +1,17 @@
+.emoji:hover {
+  background-color: rgba(56, 4, 112, 0.8);
+  border-width: 1px solid #dadada;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.emoji:focus {
+  background-color: rgba(69, 218, 64, 0.8) !important;
+  border-radius: 1ch;
+}
+
+.menu-button {
+  width: 10ch;
+  height: 8ch;
+  border-radius: 1ch;
+}
