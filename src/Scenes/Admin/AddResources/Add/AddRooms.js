@@ -180,7 +180,7 @@ const AddRooms = () => {
               onDeleteClick={() => alert("Delete")}
               onEditClick={changeToEditMode}
               onRefresh={refresh}
-              title="Available Employees"
+              title="Available Rooms"
             />
           </Col>
         </Row>

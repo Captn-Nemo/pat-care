@@ -151,7 +151,7 @@ const FoodItems = () => {
               onDeleteClick={() => alert("Delete")}
               onEditClick={changeToEditMode}
               onRefresh={getApiData}
-              title="Available Designations"
+              title="Available Food Items"
             />
           </Col>
         </Row>

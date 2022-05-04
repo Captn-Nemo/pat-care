@@ -163,7 +163,7 @@ const Diet = () => {
               <form>
                 <Card>
                   <Card.Header>
-                    <Card.Title as="h5">Add Room Category</Card.Title>
+                    <Card.Title as="h5">Update Diet</Card.Title>
                   </Card.Header>
                   <Card.Body>
                     <Form.Group as={Row} controlId="formPlaintextEmail1">

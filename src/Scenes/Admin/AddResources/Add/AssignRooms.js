@@ -141,7 +141,9 @@ const AssignRooms = () => {
             <Col>
               <Card>
                 <Card.Header>
-                  <Card.Title as="h5">Add Room</Card.Title>
+                  <Card.Title as="h5">
+                    Assign Rooms to Nursing Stations
+                  </Card.Title>
                 </Card.Header>
                 <Card.Body>
                   <Form.Group as={Row} controlId="formPlaintextEmail1">

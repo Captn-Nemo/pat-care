@@ -129,7 +129,7 @@ const AddRoomCategory = () => {
               onDeleteClick={() => alert("Delete")}
               onEditClick={changeToEditMode}
               onRefresh={getApiData}
-              title="Availabel Employees"
+              title="Availabel Room Categories"
               url={ROOMCATEGORY}
             />
           </Col>
