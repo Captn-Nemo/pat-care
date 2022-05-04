@@ -13,9 +13,12 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import ErrorText from "../../../App/components/ErrorText";
 import CustomResponseMessage from "../../../App/components/CustomResponseMessage";
-import { DINING_TIMES } from "../../../constants";
+import { DINING_TIMES, RESPONSETYPES } from "../../../constants";
 import { useAxios } from "../../../configs/useAxios";
 import Select from "react-select";
+import FoodList from "../../Dashboard/FoodList";
+import Axios from "axios";
+import { DIET_DETAILS, DIET_HEADER } from "../../../configs/apiRoutes";
 
 const AddDiet = () => {
   const {
@@ -26,26 +29,19 @@ const AddDiet = () => {
     control,
     clearErrors,
     formState: { errors },
-  } = useForm();
+  } = useForm({ code: "", name: "", diningTime: "" });
 
-  const [open, setOpen] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [ID, setId] = useState("");
+  const [modal, setModal] = useState(false);
+  const [foodItems, setFoodItems] = useState([]);
+  const [diningTime, setDiningTime] = useState("");
+  const [headerId, setHeaderId] = useState("");
   const [info, setInfo] = useState(true);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(null);
-
-  const clearOutFn = () => {
-    setInfo(false);
-    setEditMode(false);
-    setOpen(false);
-    setValue("name", "");
-    setValue("code", "");
-    setValue("notes", "");
-    clearErrors();
-  };
-
+  const [error, setError] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
   const {
     response: postData,
     error: postError,
@@ -53,160 +49,244 @@ const AddDiet = () => {
     apiRqst,
   } = useAxios();
 
-  const onSubmit = (formdata) => {
+  function make_api_call(header, foodId) {
+    let body = {
+      dietHeaderId: header,
+      itemId: foodId,
+    };
+    console.log(body);
+    // return body;
+    return Axios.post(DIET_DETAILS, body);
+  }
+
+  async function processUsers(headerId) {
+    let result;
+    let list = [];
+    for (let i = 0; i < foodItems.length; i++) {
+      result = await make_api_call(headerId, foodItems[i].itemId);
+      list[i] = result;
+    }
+    console.log(list);
+    return list;
+  }
+
+  const onSubmit = async (formdata) => {
+    setSuccess(false);
     console.log(formdata);
-    // AddNewCategory(formdata);
+    if (foodItems.length === 0) {
+      setError(true);
+      setErrMsg("Please select One food item");
+      return;
+    } else {
+      setLoading(true);
+      setInfo(true);
+      setError(false);
+      Axios.post(DIET_HEADER, formdata)
+        .then((res) => {
+          setHeaderId(res.data);
+          console.log(res);
+          let result = processUsers(res.data)
+            .then((res) => {
+              setError(false);
+              setSuccess(true);
+              setSuccessMsg("Diet Added Successfully");
+              console.log(res);
+              setLoading(false);
+            })
+            .catch((err) => {
+              setLoading(false);
+              setError(true);
+              setErrMsg(err.message);
+            });
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError(true);
+          setErrMsg(err.message);
+        });
+    }
+  };
+
+  const additem = (i, item) => {
+    let state = foodItems.slice();
+    const check_index = state.findIndex((i) => i.itemId === item.Id);
+    if (check_index !== -1) {
+      alert("item already present");
+      return;
+    } else {
+      state.push({
+        itemId: item.Id,
+        itemName: item.Name,
+        description: item.Description,
+        checked: true,
+      });
+      console.log("The product has been added to cart:");
+    }
+    setFoodItems(state);
+  };
+
+  const removeitem = (e, i) => {
+    let state = foodItems.slice();
+    if (!e.target.checked) {
+      const check_index = state.findIndex((food) => food.itemId === i);
+      if (check_index !== -1) {
+        state.splice(check_index, 1);
+      } else return;
+    }
+    setFoodItems(state);
+  };
+
+  const handleDiningChange = (e) => {
+    setValue("diningTime", e.value);
   };
 
   return (
-    <Row className="justify-content-md-center">
-      <Col md={6}>
-        <form>
-          <Card>
+    <>
+      <Modal
+        show={modal}
+        onHide={() => setModal(false)}
+        size="lg"
+        centered
+        scrollable
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Items</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FoodList fromAdmin={true} addItem={additem} />
+        </Modal.Body>
+      </Modal>
+
+      <Row className="justify-content-md-center">
+        <Col md={9}>
+          {error && <ErrorText msg={errMsg} />}
+
+          {success && (
+            <CustomResponseMessage
+              type={RESPONSETYPES.SUCCESS}
+              msg={successMsg}
+            />
+          )}
+          <form>
+            {/* <Card>
             <Card.Header>
               <Card.Title as="h5">Add Diet</Card.Title>
             </Card.Header>
-            <Card.Body>
-              <Form.Group as={Row} controlId="formPlaintextEmail1">
-                <Form.Label column sm="3">
-                  Code
-                </Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    {...register("code", {
-                      required: true,
-                    })}
-                    type="text"
-                    placeholder="Code"
-                    className="mb-3"
-                  />
-                  {errors.code && <ErrorText msg="This Field is Required" />}
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="formPlaintextEmail1">
-                <Form.Label column sm="3">
-                  Name
-                </Form.Label>
-                <Col sm="9">
-                  <Form.Control
-                    {...register("name", {
-                      required: true,
-                    })}
-                    type="text"
-                    placeholder="Name"
-                    className="mb-3"
-                  />
-                  {errors.name && <ErrorText msg="This Field is Required" />}
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} controlId="formPlaintextEmail1">
-                <Form.Label column sm="3">
-                  Notes
-                </Form.Label>
-                <Col sm="9">
-                  <Controller
-                    name="designation"
-                    control={control}
-                    render={({ onChange, value, name, ref }) => (
-                      <Select
-                        className="basic-single"
-                        classNamePrefix="select"
-                        inputRef={ref}
-                        // defaultValue={
-                        //   editMode &&
-                        //   getStation(desigData, getValues("designation"))
-                        // }
-                        options={DINING_TIMES}
-                        // onChange={handleDiningChnage}
-                      />
-                    )}
-                  />
-                </Col>
-              </Form.Group>
-
-              <Form.Group as={Row} controlId="formPlaintextEmail1">
-                <Form.Label column sm="3"></Form.Label>
-                <Col sm="9">
-                  <Row>
-                    <Col>
-                      <Button
-                        type="submite"
-                        onClick={handleSubmit(onSubmit)}
-                        className="shadow-5"
-                        block
-                        variant="primary"
-                      >
-                        {postLoading ? "wait ..." : "submit"}
-                      </Button>
-                    </Col>
-                    <Col>
-                      <Button
-                        block
-                        className="shadow-5"
-                        variant="danger"
-                        onClick={() => {
-                          clearOutFn();
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                    </Col>
-                  </Row>
-                </Col>
-              </Form.Group>
-
-              <Row className="m-3">
-                <Col md={12}>
-                  <div className="form-group text-left">
-                    <div className="checkbox checkbox-fill d-inline">
-                      <input
-                        type="checkbox"
-                        name="checkbox-fill-1"
-                        id="checkbox-fill-a1"
-                      />
-                      <label htmlFor="checkbox-fill-a1" className="cr">
-                        {" "}
-                        Item 1
-                      </label>
+            <Card.Body> */}
+            <Form.Group as={Row} controlId="formPlaintextEmail1">
+              <Form.Label column sm="3">
+                Code
+              </Form.Label>
+              <Col sm="9">
+                <Form.Control
+                  {...register("code", {
+                    required: true,
+                  })}
+                  type="text"
+                  placeholder="Code"
+                  className="mb-3"
+                />
+                {errors.code && <ErrorText msg="This Field is Required" />}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="formPlaintextEmail1">
+              <Form.Label column sm="3">
+                Name
+              </Form.Label>
+              <Col sm="9">
+                <Form.Control
+                  {...register("name", {
+                    required: true,
+                  })}
+                  type="text"
+                  placeholder="Name"
+                  className="mb-3"
+                />
+                {errors.name && <ErrorText msg="This Field is Required" />}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} controlId="formPlaintextEmail1">
+              <Form.Label column sm="3">
+                Dining Time
+              </Form.Label>
+              <Col sm="9">
+                <Select
+                  className="basic-single"
+                  classNamePrefix="select"
+                  options={DINING_TIMES}
+                  onChange={handleDiningChange}
+                />
+              </Col>
+            </Form.Group>
+            <Row className="my-3">
+              <Col>
+                <Button
+                  size="sm"
+                  variant="success"
+                  onClick={() => {
+                    setModal(true);
+                  }}
+                >
+                  Add Food item
+                </Button>
+              </Col>
+            </Row>
+            {foodItems.length == 0 ? (
+              <div className="text-center"> Please Select Food items</div>
+            ) : (
+              foodItems.map((item, index) => (
+                <Row className="m-3">
+                  <Col md={12}>
+                    <div className="form-group text-left">
+                      <div className="checkbox checkbox-fill d-inline">
+                        <input
+                          type="checkbox"
+                          name={`checkbox-fill-1`}
+                          id={`checkbox-fill-a1`}
+                          checked={item.checked}
+                          onChange={(e) => {
+                            removeitem(e, item.itemId);
+                          }}
+                        />
+                        <label htmlFor="checkbox-fill-a1" className="cr">
+                          {" "}
+                          {item.itemName}
+                        </label>
+                        <label htmlFor="checkbox-fill-a1" className="cr ml-4">
+                          {" "}
+                          {item.description} Desc comes here
+                        </label>
+                      </div>
                     </div>
-                  </div>
-                </Col>
-                <Col md={12}>
-                  <div className="form-group text-left">
-                    <div className="checkbox checkbox-fill d-inline">
-                      <input
-                        type="checkbox"
-                        name="checkbox-fill-2"
-                        id="checkbox-fill-a2"
-                      />
-                      <label htmlFor="checkbox-fill-a2" className="cr">
-                        {" "}
-                        Item 1
-                      </label>
-                    </div>
-                  </div>
-                </Col>
-                <Col md={12}>
-                  <div className="form-group text-left">
-                    <div className="checkbox checkbox-fill d-inline">
-                      <input
-                        type="checkbox"
-                        name="checkbox-fill-3"
-                        id="checkbox-fill-a3"
-                      />
-                      <label htmlFor="checkbox-fill-a3" className="cr">
-                        {" "}
-                        Item 1
-                      </label>
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        </form>
-      </Col>
-    </Row>
+                  </Col>
+                </Row>
+              ))
+            )}
+            <div className="mb-5"></div>
+            <Form.Group as={Row} controlId="formPlaintextEmail1">
+              <Form.Label column sm="3"></Form.Label>
+              <Col sm="9">
+                <Row>
+                  <Col>
+                    <Button
+                      type="submite"
+                      onClick={handleSubmit(onSubmit)}
+                      className="shadow-5"
+                      block
+                      variant="primary"
+                    >
+                      {postLoading ? "wait ..." : "submit"}
+                    </Button>
+                  </Col>
+                </Row>
+              </Col>
+            </Form.Group>
+            {/* </Card.Body>
+          </Card> */}
+          </form>
+        </Col>
+      </Row>
+    </>
   );
 };
 

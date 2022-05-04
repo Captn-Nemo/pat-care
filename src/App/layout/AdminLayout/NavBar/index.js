@@ -48,7 +48,7 @@ class NavBar extends Component {
           </a>
           <div className="collapse navbar-collapse">
             {/* <NavLeft /> */}
-            {/* <NavRight rtlLayout={false} /> */}
+            <NavRight rtlLayout={false} />
           </div>
         </header>
       </Aux>

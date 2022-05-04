@@ -264,14 +264,7 @@ const Diet = () => {
           </Row>
         </Modal.Body>
       </Modal>
-      <Row className="mb-3">
-        <Col>
-          <Button onClick={() => setOpen(true)}>
-            <i className="feather icon-plus" />
-            Add Diet
-          </Button>
-        </Col>
-      </Row>
+
       {rendertable()}
     </>
   );

@@ -1,5 +1,6 @@
 export const getStation = (data, id) => {
   let val = data.filter((item) => item.Id == id)[0];
+
   return { label: val.Name, value: val.Id };
 };
 

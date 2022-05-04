@@ -16,18 +16,19 @@ import { ChangeAuthType } from "../../../store/actions";
 
 const SignUp1 = () => {
   const dispatch = useDispatch();
-  const NCID = useSelector((state) => state.NCID);
+  const NS_DEPT = useSelector((state) => state.NS_DEPT);
   const history = useHistory();
   const { data: deptData, loading } = useFetch(DEPARTMENTS);
   const { data: NSData, NSloading } = useFetch(NURSINGSTATIONS);
   const [error, setError] = useState(false);
+  const [loginError, setLoginError] = useState(false);
   const [state, setState] = useState({
     email: null,
     password: null,
     dept: { label: "", value: "" },
     NS: null,
   });
-  console.log(NCID);
+
   const handleDeptChange = (selectedOption) => {
     setState({ ...state, dept: selectedOption });
   };
@@ -40,20 +41,29 @@ const SignUp1 = () => {
   };
   const LoginHandler = () => {
     // validation
+
     if (state.email && state.password && state.dept.label !== "") {
       setError(false);
-      // Axios.post(`${USER}/${state.email}/${state.password}`).then((res) => {
-      //   console.log(res.data);
-      //   localStorage.setItem("dept", JSON.stringify(state.dept));
-      //   localStorage.setItem("NS", JSON.stringify(state.NS));
-      //   history.push("/admin/depts");
-      // })
-      dispatch(ChangeAuthType("ADMIN"));
-      localStorage.setItem("isAdmin", true);
-      localStorage.setItem("dept", JSON.stringify(state.dept));
-      localStorage.setItem("NS", JSON.stringify(state.NS));
-      history.push("/admin/depts");
-      console.log("inside login handler");
+      Axios.get(`/api/Login/${state.email}/${state.password}`)
+        .then((res) => {
+          dispatch(ChangeAuthType("ADMIN"));
+          localStorage.setItem("isAdmin", true);
+          localStorage.setItem("userRole", "ADMIN");
+          localStorage.setItem("dept", JSON.stringify(state.dept));
+          localStorage.setItem("user", JSON.stringify(res.data));
+          localStorage.setItem("NS", JSON.stringify(state.NS));
+          history.push("/admin/depts");
+        })
+        .catch((err) => {
+          setLoginError(true);
+        });
+      // dispatch(ChangeAuthType("ADMIN"));
+      // localStorage.setItem("isAdmin", true);
+      // localStorage.setItem("dept", JSON.stringify(state.dept));
+      // // localStorage.setItem("user", JSON.stringify(res.data));
+      // localStorage.setItem("NS", JSON.stringify(state.NS));
+      // history.push("/admin/depts");
+      // console.log("inside login handler");
     } else {
       setError(true);
     }
@@ -112,6 +122,13 @@ const SignUp1 = () => {
               </div>
               <h3 className="mb-4">Admin Login</h3>
               {error && <CustomResponseMessage customMessage />}
+              {loginError && (
+                <CustomResponseMessage
+                  type={RESPONSETYPES.ERROR}
+                  customMessage
+                  msg="Login Failed Please try again"
+                />
+              )}
               <div className="input-group mb-3">
                 <input
                   type="email"
@@ -132,7 +149,7 @@ const SignUp1 = () => {
               </div>
 
               {renderDeptSelect()}
-              {state.dept.value === NCID ? renderNSSelect() : null}
+              {state.dept.value == NS_DEPT ? renderNSSelect() : null}
               {/* <div className="form-group text-left">
                 <div className="checkbox checkbox-fill d-inline">
                   <input

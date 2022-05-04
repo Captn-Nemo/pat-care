@@ -17,7 +17,7 @@ export const RESPONSETYPES = {
 };
 
 export const DINING_TIMES = [
-  { label: "BreakFast", value: 0 },
-  { label: "Lunch", value: 1 },
-  { label: "Dinner", value: 2 },
+  { label: "BreakFast", value: 2 },
+  { label: "Lunch", value: 2 },
+  { label: "Dinner", value: 3 },
 ];

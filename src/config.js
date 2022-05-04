@@ -27,6 +27,7 @@ export default {
   // Roles
   currentRole: "PATIENT",
   NCID: "00000",
-  LABID: "00001",
-  FOODID: "00002",
+  LAB_DEPT: 25,
+  FOOD_DEPT: 26,
+  NS_DEPT: 27,
 };

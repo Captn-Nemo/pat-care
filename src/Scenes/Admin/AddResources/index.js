@@ -18,9 +18,12 @@ const AdminHome = () => {
             <Tab eventKey="hospital" title="Hospital">
               <Add.AddHospital />
             </Tab>
-            {/* <Tab eventKey="assign" title="Assign Rooms">
+            <Tab eventKey="assign" title="Assign Rooms">
               <Add.AssignRooms />
-            </Tab> */}
+            </Tab>
+            <Tab eventKey="user" title="Users">
+              <Add.AddUser />
+            </Tab>
             <Tab eventKey="dept" title="Department">
               <Add.AddDepartment />
             </Tab>

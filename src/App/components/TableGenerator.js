@@ -13,7 +13,9 @@ const TableGenerator = ({
   disableActions = false,
   forwardButton = false,
   forwardToStation,
+  allotTimeFn,
   customPage = 0,
+  allotTime = false,
 }) => {
   const [tdata, setTData] = useState(data);
 
@@ -42,6 +44,13 @@ const TableGenerator = ({
           tooltip: "Forward to Other station",
           iconProps: { color: "primary" },
           onClick: (event, rowData) => forwardToStation(rowData),
+        },
+        {
+          hidden: !allotTime,
+          icon: "event",
+          tooltip: "Allot Time",
+          iconProps: { color: "primary" },
+          onClick: (event, rowData) => allotTimeFn(rowData),
         },
         {
           hidden: disableActions,

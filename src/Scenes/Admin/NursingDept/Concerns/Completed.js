@@ -9,28 +9,30 @@ import { CONCERNS_TABLE } from "../../../../configs/tableConfigs";
 import TableGenerator from "../../../../App/components/TableGenerator";
 import axios from "axios";
 import StationToStation from "../StationToStation";
+import AllotTime from "../AllotTime";
 import { useSelector } from "react-redux";
 
 const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
-  const NCID = useSelector((state) => state.NCID);
+  const { NCID, NS_DEPT, LAB_DEPT } = useSelector((state) => state);
 
+  const dept = JSON.parse(localStorage.getItem("dept"));
+  const NS = JSON.parse(localStorage.getItem("NS"));
+  console.log(NS);
   const [open, setOpen] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [ID, setId] = useState("");
-  const [info, setInfo] = useState(true);
+  const [timeModal, setTimeModal] = useState(false);
+  const [rowData, setRowData] = useState(null);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
   const [DID, setDID] = useState(0);
   const [NC, setNC] = useState(0);
+  const [bookingData, setBookingData] = useState(null);
 
   const getApiData = () => {
-    let dept = JSON.parse(localStorage.getItem("dept"));
-    let NS = JSON.parse(localStorage.getItem("NS"));
-    let deptID = dept.value === NCID ? 0 : dept.value;
-    let NSID = NS === NCID ? 0 : dept.value;
+    let deptID = dept.value == NS_DEPT ? 0 : dept.value;
+    let NSID = deptID == 0 ? NS.value : 0;
     let status = 0;
-    setLoading("loading...");
+    setLoading(true);
     setDID(deptID);
     setNC(NSID);
     setData(null);
@@ -44,7 +46,7 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
         })
         .catch((err) => {
           setError(err.message);
-          setLoading(null);
+          setLoading(false);
         });
     } else {
       axios
@@ -59,38 +61,19 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
         });
     }
   };
+
   useEffect(() => {
     getApiData();
   }, []);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    control,
-    clearErrors,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (formdata) => {
-    console.log(formdata);
-    // AddNursingStation(formdata);
-  };
-  const {
-    response: postData,
-    error: postError,
-    loading: postLoading,
-    apiRqst,
-  } = useAxios();
-
-  const changeToEditMode = (rowData) => {
-    setEditMode(true);
-    setId(rowData.Id);
-    setValue("code", rowData.Code);
-    setValue("name", rowData.Name);
-    setValue("notes", rowData.Notes);
+  const triggerForward = (rowData) => {
+    setBookingData(rowData);
     setOpen(true);
+  };
+
+  const allotTimeFn = (rowData) => {
+    setTimeModal(true);
+    setRowData(rowData);
   };
 
   //Rendering the Table based on the Data from API
@@ -108,13 +91,15 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
               columns={CONCERNS_TABLE}
               data={data}
               onDeleteClick={() => alert("Delete")}
-              onEditClick={changeToEditMode}
+              // onEditClick={changeToEditMode}
               onRefresh={getApiData}
-              title="Completed"
+              title="Completed Concerns"
               url={BOOKING}
               disableActions
+              allotTime={dept.value == LAB_DEPT ? true : false}
+              allotTimeFn={allotTimeFn}
               forwardButton={DID == 0 ? true : false}
-              forwardToStation={() => setOpen(true)}
+              forwardToStation={triggerForward}
             />
           </Col>
         </Row>
@@ -139,7 +124,30 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
         size="lg"
       >
         <Modal.Body>
-          <StationToStation />
+          <StationToStation
+            booking={bookingData}
+            stationId={NS}
+            getApiData={getApiData}
+            onCancel={() => {
+              setOpen(false);
+            }}
+          />
+        </Modal.Body>
+      </Modal>
+      <Modal
+        centered
+        show={timeModal}
+        onHide={() => {
+          setTimeModal(false);
+        }}
+        size="lg"
+      >
+        <Modal.Body>
+          <AllotTime
+            rowData={rowData}
+            onCancel={setTimeModal}
+            getApiData={getApiData}
+          />
         </Modal.Body>
       </Modal>
       {rendertable()}

@@ -35,15 +35,7 @@ export default {
           type: "item",
           icon: "feather icon-list",
           url: "/admin/diets",
-          // target: true,
-        },
-        {
-          id: "Logout",
-          title: "Logout",
-          type: "item",
-          icon: "feather icon-log-out",
-          url: "/admin",
-          // target: true,
+          // target: true
         },
       ],
     },

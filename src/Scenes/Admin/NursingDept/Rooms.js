@@ -14,9 +14,6 @@ import {
   Popover,
 } from "react-bootstrap";
 import "./style.css";
-import Datetime from "react-datetime";
-import RoomWiseTable from "../../Tables/RoomWiseTable";
-
 import useFetch from "../../../configs/useFetch";
 import { CHECKOUT, GET_ASSIGNED_ROOMS } from "../../../configs/apiRoutes";
 import RetryButton from "../../../App/components/RetryButton";
@@ -224,10 +221,7 @@ export const Rooms = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title as="h6">Room No : {currentRoom.Name}</Modal.Title>
-          <Datetime
-            dateFormat="dddd D MMMM Y -"
-            inputProps={{ placeholder: "Select Date & Time" }}
-          />
+
           {/* {JSON.stringify(currentRoom)} */}
         </Modal.Header>
         <Modal.Body>

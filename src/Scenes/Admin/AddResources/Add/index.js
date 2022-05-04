@@ -6,6 +6,7 @@ import AddRoomCategory from "./AddRoomCategory";
 import AddRooms from "./AddRooms";
 import AddStations from "./AddStations";
 import AssignRooms from "./AssignRooms";
+import AddUser from "./Add User";
 
 export {
   AddDepartment,
@@ -16,4 +17,5 @@ export {
   AddRooms,
   AddStations,
   AssignRooms,
+  AddUser,
 };

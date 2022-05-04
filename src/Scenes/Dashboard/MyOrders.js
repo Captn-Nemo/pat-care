@@ -95,13 +95,11 @@ const MyOrders = () => {
       data: body,
     })
       .then(() => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("byStanderId");
-        localStorage.removeItem("isAuthed");
+        localStorage.clear();
         alert("Successfully checked out");
         setTimeout(() => {
           setInfo(false);
-        }, 2000);
+        }, 500);
         setModal(false);
         history.push("/");
       })
@@ -109,7 +107,7 @@ const MyOrders = () => {
         alert("Errr checking out");
         setTimeout(() => {
           setInfo(false);
-        }, 2000);
+        }, 500);
         setModal(false);
       });
   };

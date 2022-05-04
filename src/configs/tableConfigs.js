@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 export const HOSPITAL_TABLE = [
   { title: "ID", field: "Id" },
   { title: "Code", field: "Code" },
@@ -19,6 +20,23 @@ export const DEPARTMENT_TABLE = [
   {
     title: "Notes",
     field: "Notes",
+  },
+];
+export const USERS = [
+  { title: "ID", field: "Id" },
+  { title: "First Name", field: "FirstName" },
+  { title: "LAst Name", field: "LastName" },
+  {
+    title: "E mail",
+    field: "Email",
+  },
+  {
+    title: "Password",
+    field: "Password",
+  },
+  {
+    title: "User Group",
+    field: "userGroup",
   },
 ];
 export const DESIGNATION_TABLE = [
@@ -148,6 +166,26 @@ export const CONCERNS_TABLE = [
   { title: "Bystander", field: "BystanderId" },
   { title: "Concerns", field: "Concerns" },
   { title: "Severity", field: "Severity" },
+  {
+    title: "AllottedFor",
+
+    field: "AllottedFor",
+    render: (rowData) => {
+      if (rowData.AllottedFor === "" || rowData.AllottedFor === null) {
+        return (
+          <div>
+            <span>Not Allotted</span>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <span>{moment(rowData.AllottedFor).format("ddd,MMM D LT")}</span>
+          </div>
+        );
+      }
+    },
+  },
   { title: "RespondedStatus", field: "RespondedStatusId" },
   {
     title: "Status",
@@ -160,9 +198,5 @@ export const CONCERNS_TABLE = [
   {
     title: "RespondedDate",
     field: "RespondedDate",
-  },
-  {
-    title: "AllottedFor",
-    field: "AllottedFor",
   },
 ];

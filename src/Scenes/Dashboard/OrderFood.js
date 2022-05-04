@@ -6,6 +6,7 @@ import { DIET_HEADER, FOOD_ITEMS, FOOD_ORDER } from "../../configs/apiRoutes";
 import useFetch from "../../configs/useFetch";
 import "./style.css";
 import CartList from "./CartList";
+import FoodList from "./FoodList";
 import Axios from "axios";
 import { dropDownvalues } from "../../configs/helpers";
 import { RESPONSETYPES } from "../../constants";
@@ -21,7 +22,7 @@ const OrderFood = ({ onCancel, category }) => {
   const [modal, setModal] = useState(false);
   const [Fdata, setFData] = useState([]);
   const [info, setInfo] = useState(true);
-  const [foodDesc, setFoodDesc] = useState("");
+  const [errorFlag, setErrorFlag] = useState(false);
   const foodTimes = [
     { value: 1, label: "Breakfast" },
     { value: 2, label: "Lunch" },
@@ -36,14 +37,7 @@ const OrderFood = ({ onCancel, category }) => {
     getData: getDietData,
   } = useFetch(DIET_HEADER);
 
-  const [foodItems, setfoodItems] = useState([
-    {
-      itemId: 5,
-      qty: 2,
-      Name: "Fish fry",
-      description: "",
-    },
-  ]);
+  const [foodItems, setfoodItems] = useState([]);
 
   const {
     response: postData,
@@ -54,7 +48,7 @@ const OrderFood = ({ onCancel, category }) => {
 
   const additem = (quantity, item) => {
     let state = foodItems.slice();
-    const check_index = state.findIndex((i) => i.itemId === item.itemId);
+    const check_index = state.findIndex((i) => i.itemId === item.ItemId);
     if (check_index !== -1) {
       state[check_index].qty++;
       console.log("Quantity updated:", item.Name);
@@ -62,8 +56,8 @@ const OrderFood = ({ onCancel, category }) => {
       state.push({
         qty: quantity,
         description: "",
-        itemId: item.Id,
-        Name: item.Name,
+        itemId: item.ItemId,
+        Name: item.ItemName,
       });
       console.log("The product has been added to cart:");
     }
@@ -102,6 +96,16 @@ const OrderFood = ({ onCancel, category }) => {
   };
 
   const submitFoodOrder = () => {
+    setInfo(true);
+
+    if (foodItems.length == 0) {
+      setErrorFlag(true);
+      setTimeout(() => {
+        setInfo(false);
+      }, 1500);
+      return;
+    }
+
     let body = {
       roomId: userData.RoomId,
       diningTime: time,
@@ -121,6 +125,7 @@ const OrderFood = ({ onCancel, category }) => {
       }, 3000);
     });
   };
+
   return (
     <>
       <Modal
@@ -134,39 +139,7 @@ const OrderFood = ({ onCancel, category }) => {
           <Modal.Title>Add Items</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {Fdata.length > 0 ? (
-            Fdata.map((food, i) => {
-              return (
-                <>
-                  <Card key={i}>
-                    <Card.Body className="p-2">
-                      <div className="d-flex flex-row align-items-center justify-content-between">
-                        <div>
-                          <Card.Img src={dosa} className="food-thumb" />
-                        </div>
-                        <div className="ml-3">
-                          <h4 className="text-black text-center">
-                            {food.Name}
-                          </h4>
-                        </div>
-
-                        <div className="ml-3">
-                          <Button
-                            variant="success"
-                            onClick={() => additem(1, food)}
-                          >
-                            Select
-                          </Button>
-                        </div>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </>
-              );
-            })
-          ) : (
-            <Spinner />
-          )}
+          <FoodList dietId={diet} additem={additem} />
         </Modal.Body>
       </Modal>
 
@@ -180,6 +153,13 @@ const OrderFood = ({ onCancel, category }) => {
           ) : null}
           {info && postError ? (
             <CustomResponseMessage type={RESPONSETYPES.ERROR} />
+          ) : null}
+          {info && errorFlag ? (
+            <CustomResponseMessage
+              type={RESPONSETYPES.ERROR}
+              customMessage
+              msg="Please Select atleast One Item"
+            />
           ) : null}
           <Card>
             <Card.Header>

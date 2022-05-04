@@ -24,12 +24,10 @@ import {
 import useFetch from "../../../../configs/useFetch";
 import { useAxios } from "../../../../configs/useAxios";
 import MaterialTable from "material-table";
-import { ROOMS_TABLE } from "../../../../configs/tableConfigs";
-import TableGenerator from "../../../../App/components/TableGenerator";
 import CustomResponseMessage from "../../../../App/components/CustomResponseMessage";
 import { getStation, dropDownvalues } from "../../../../configs/helpers";
 import axios from "axios";
-
+import moment from "moment";
 const AssignRooms = () => {
   const { data: NSData, loading: ns, error: two, getData: fn1 } = useFetch(
     NURSINGSTATIONS
@@ -39,138 +37,104 @@ const AssignRooms = () => {
     loading: roomLoading,
     error: roomError,
     getData: fn2,
-  } = useFetch(NURSINGSTATIONS);
-  const [open, setOpen] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [ID, setId] = useState("");
-  const [info, setInfo] = useState(true);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(null);
-  const getApiData = () => {
-    setLoading("loading...");
-    setData(null);
-    setError(null);
-    axios
-      .get(ROOMS)
-      .then((res) => {
-        setLoading(false);
-        setData(res.data);
-      })
-      .catch((err) => {
-        setLoading(false);
-        setError("An error occurred. Awkward..");
-      });
-  };
-  useEffect(() => {
-    getApiData();
-  }, []);
+  } = useFetch(ROOMS);
 
   const refresh = () => {
     fn1();
     fn2();
-    getApiData();
   };
 
-  // const getStation = (data, id) => {
-  //   let val = data.filter((item) => item.Id == id)[0];
-  //   return { label: val.Name, value: val.Id };
-  // };
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    control,
-    clearErrors,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (formdata) => {
-    console.log(formdata);
-    AddNewRoom(formdata);
-  };
-
-  //Getting Dept Data from Backend
-  const {
-    response: postData,
-    error: postError,
-    loading: postLoading,
-    apiRqst,
-  } = useAxios();
-
-  // Edit Modal Configuration Function
-  const changeToEditMode = (rowData) => {
-    console.log(rowData);
-    setEditMode(true);
-    setId(rowData.Id);
-    setValue("nursingStationId", rowData.CategoryId);
-    setOpen(true);
-  };
-
-  const clearOutFn = () => {
-    setInfo(false);
-    setEditMode(false);
-    setOpen(false);
-    setValue("nursingStationId", "");
-    clearErrors();
-  };
+  const dept = JSON.parse(localStorage.getItem("dept"));
+  console.log(dept);
+  const [NSID, setNSID] = useState(0);
+  const [info, setInfo] = useState(true);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [errMessage, setErrMessage] = useState("");
 
   const handleCatChange = (item) => {
-    setValue("nursingStationId", item.value);
+    setNSID(item.value);
   };
   const handleRoomsChange = (item) => {
     console.log(item);
+    setData(item);
   };
 
-  const AddNewRoom = (apiData) => {
-    console.log(apiData);
-    setInfo(true);
-    if (editMode) {
-      const body = { ...apiData, Id: ID };
-      console.log(body);
-      apiRqst({
-        method: "PUT",
-        url: GET_ASSIGNED_ROOMS,
-        data: body,
-      }).then(() => {
-        // const dataUpdate = data.splice();
-        // objIndex = dataUpdate.findIndex((obj) => obj.Id === ID);
-        // dataUpdate[objIndex] = body;
-        // setData([...dataUpdate]);
-        getApiData();
-      });
-    } else {
-      const body = { ...apiData, Id: 0 };
-      console.log(body);
-      apiRqst({
-        method: "POST",
-        url: GET_ASSIGNED_ROOMS,
-        data: body,
-      }).then(() => {
-        getApiData();
-        //  const dataUpdate = data.splice();
-        //  dataUpdate.push(body);
-        //  setData([...dataUpdate]);
-      });
+  function make_api_call(id) {
+    let body = {
+      nursingStationId: NSID,
+      roomId: id,
+      assignedDate: moment().toISOString(),
+      assignedBy: dept.value,
+    };
+    // return body;
+    return axios.post(GET_ASSIGNED_ROOMS, body);
+  }
+
+  async function processUsers() {
+    let result;
+    let list = [];
+    for (let i = 0; i < data.length; i++) {
+      result = await make_api_call(data[i].value);
+      list[i] = result;
     }
-  };
+    console.log(list);
+    return list;
+  }
+
+  async function doTask() {
+    setLoading(true);
+    setInfo(true);
+    if (data.length == 0 || NSID == 0) {
+      console.log("inside");
+      setErrMessage("Please select atleast one room and Nursing Station");
+      setError(true);
+      clearOut();
+      return;
+    } else {
+      setInfo(true);
+      let result = await processUsers()
+        .then((res) => {
+          setError(false);
+          setErrMessage("");
+          setSuccess(true);
+          setData([]);
+          clearOut();
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrMessage(err);
+          setError(true);
+          clearOut();
+        });
+    }
+  }
+
+  function clearOut() {
+    setLoading(false);
+    setTimeout(() => {
+      setInfo(false);
+      setSuccess(false);
+    }, 2000);
+  }
 
   function rendertable() {
-    if (loading) {
-      return <RetryButton retryFn={getApiData} />;
+    if (ns && roomLoading) {
+      return <RetryButton retryFn={refresh} />;
     } else if (NSData?.length > 0 && RoomData?.length > 0) {
       return (
         <>
-          {info && postData ? (
-            <CustomResponseMessage
-              type={RESPONSETYPES.SUCCESS}
-              msg={postData}
-            />
+          {info && success ? (
+            <CustomResponseMessage type={RESPONSETYPES.SUCCESS} />
           ) : null}
-          {info && postError ? (
-            <CustomResponseMessage type={RESPONSETYPES.ERROR} />
+          {info && error ? (
+            <CustomResponseMessage
+              type={RESPONSETYPES.ERROR}
+              customMessage
+              msg={errMessage}
+            />
           ) : null}
 
           <Row className="justify-content-md-center">
@@ -185,22 +149,11 @@ const AssignRooms = () => {
                       Select Nursing Station
                     </Form.Label>
                     <Col sm="9">
-                      <Controller
-                        name="nursingStationId"
-                        control={control}
-                        render={({ onChange, value, name, ref }) => (
-                          <Select
-                            className="basic-single"
-                            classNamePrefix="select"
-                            inputRef={ref}
-                            defaultValue={
-                              editMode &&
-                              getStation(NSData, getValues("nursingStationId"))
-                            }
-                            options={dropDownvalues(NSData)}
-                            onChange={handleCatChange}
-                          />
-                        )}
+                      <Select
+                        className="basic-single"
+                        classNamePrefix="select"
+                        options={dropDownvalues(NSData)}
+                        onChange={handleCatChange}
                       />
                     </Col>
                   </Form.Group>
@@ -209,35 +162,13 @@ const AssignRooms = () => {
                       Select Rooms
                     </Form.Label>
                     <Col sm="9">
-                      <Controller
-                        name="rooms"
-                        control={control}
-                        render={({ onChange, value, name }) => (
-                          <Select
-                            isMulti
-                            className="basic-single"
-                            classNamePrefix="select"
-                            // defaultValue={
-                            //   editMode &&
-                            //   getStation(NSData, getValues("roo"))
-                            // }
-                            options={dropDownvalues(RoomData)}
-                            onChange={handleRoomsChange}
-                          />
-                        )}
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} controlId="formPlaintextEmail1">
-                    <Form.Label column sm="3">
-                      Section
-                    </Form.Label>
-                    <Col sm="9">
-                      <Form.Control
-                        type="text"
-                        {...register("section")}
-                        placeholder="Name"
-                        className="mb-3"
+                      <Select
+                        isMulti
+                        className="basic-single"
+                        classNamePrefix="select"
+                        value={data}
+                        options={dropDownvalues(RoomData)}
+                        onChange={handleRoomsChange}
                       />
                     </Col>
                   </Form.Group>
@@ -248,24 +179,24 @@ const AssignRooms = () => {
                         <Col>
                           <Button
                             type="submite"
-                            onClick={handleSubmit(onSubmit)}
+                            onClick={() => doTask()}
                             className="shadow-5"
                             block
                             variant="primary"
                           >
-                            {postLoading ? "wait ..." : "submit"}
+                            {loading ? "wait ..." : "submit"}
                           </Button>
                         </Col>
-                        <Col>
+                        {/* <Col>
                           <Button
                             block
                             className="shadow-5"
                             variant="danger"
-                            onClick={() => clearOutFn()}
+                            // onClick={() => clearOutFn()}
                           >
                             Cancel
                           </Button>
-                        </Col>
+                        </Col> */}
                       </Row>
                     </Col>
                   </Form.Group>
@@ -273,8 +204,6 @@ const AssignRooms = () => {
               </Card>
             </Col>
           </Row>
-
-          {rendertable()}
         </>
       );
     }

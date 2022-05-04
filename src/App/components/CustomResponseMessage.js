@@ -12,6 +12,15 @@ const CustomResponseMessage = ({ type, msg = "", customMessage = false }) => {
         {/* <p>Request Failed Please Try Again</p> */}
       </Alert>
     );
+  } else if (type === RESPONSETYPES.SUCCESS && customMessage) {
+    return (
+      <Alert variant="success">
+        <Alert.Heading as="h4">
+          {msg === "" ? "Work Done Successfully" : msg}
+        </Alert.Heading>
+        {/* <p>Request Failed Please Try Again</p> */}
+      </Alert>
+    );
   } else if (type === RESPONSETYPES.SUCCESS)
     return (
       <Alert variant="success">
