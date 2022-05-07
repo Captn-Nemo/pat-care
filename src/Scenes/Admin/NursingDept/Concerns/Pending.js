@@ -115,7 +115,7 @@ const PendingConcerns = ({ isRoom = false, roomId = null }) => {
               // onEditClick={changeToEditMode}
               changeStatus={changeStatus}
               onRefresh={getApiData}
-              title="Completed Concerns"
+              title="Pending Concerns"
               url={BOOKING}
               disableActions
               allotTime={dept.value == LAB_DEPT ? true : false}
