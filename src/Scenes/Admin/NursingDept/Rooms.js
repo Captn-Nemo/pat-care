@@ -40,7 +40,11 @@ export const Rooms = () => {
   } = useAxios();
 
   // API For Loading The Room Data
-  const { data, loading, error, getData } = useFetch(GET_ASSIGNED_ROOMS);
+  const { data = [], loading, error, getData } = useFetch(GET_ASSIGNED_ROOMS);
+
+  const refrehsPage = () => {
+    getData();
+  };
 
   const openModal = (room) => {
     setCurrentRoom(room);
@@ -51,7 +55,7 @@ export const Rooms = () => {
     setCurrentRoom(room);
     setOpen(true);
   };
-  console.log(postData);
+
   // Function For Updating The Vote and Checkout
   const Checkout = (rid) => {
     let roomId = parseInt(rid);
@@ -60,12 +64,12 @@ export const Rooms = () => {
     const body = { Id: roomId, InOrOut: 2, Vote: vote };
     apiRqst({
       method: "PUT",
-      url: CHECKOUT,
+      url: `${CHECKOUT}/${roomId}`,
       data: body,
     })
       .then((res) => {
+        refrehsPage();
         setTimeout(() => {
-          getData();
           setInfo(false);
           setOpen(false);
         }, 1000);
@@ -77,12 +81,20 @@ export const Rooms = () => {
         alert("Error Checking out");
       });
   };
-  console.log(currentRoom);
+
   const renderRooms = () => {
     if (error) {
       return <RetryButton retryFn={getData} />;
+    } else if (loading) {
+      return (
+        <div className="d-flex justify-content-center">
+          <Spinner animation="border" variant="info" />;
+        </div>
+      );
     }
-    if (data?.length > 0) {
+    if (data?.length == 0) {
+      return <h4 className="text-success">No Room Data Available </h4>;
+    } else if (data?.length > 0) {
       const floors = [...new Set(data.map((item) => item.Floor))];
       return floors.map((floor, i) => {
         return (

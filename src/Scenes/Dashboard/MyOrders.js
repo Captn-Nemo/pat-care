@@ -29,7 +29,7 @@ const MyOrders = () => {
   console.log(user, byStanderId);
 
   const getApiData = () => {
-    Axios.get(`${BOOKING}/${byStanderId}/${useriD}/`)
+    Axios.get(`${BOOKING}/${user.Id}/${useriD}/`)
       .then((res) => {
         setLoading(false);
         setData(res.data);

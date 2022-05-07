@@ -18,8 +18,8 @@ const SignUp1 = () => {
   const dispatch = useDispatch();
   const NS_DEPT = useSelector((state) => state.NS_DEPT);
   const history = useHistory();
-  const { data: deptData, loading } = useFetch(DEPARTMENTS);
-  const { data: NSData, NSloading } = useFetch(NURSINGSTATIONS);
+  const { data: deptData = [], loading } = useFetch(DEPARTMENTS);
+  const { data: NSData = [], NSloading } = useFetch(NURSINGSTATIONS);
   const [error, setError] = useState(false);
   const [loginError, setLoginError] = useState(false);
   const [state, setState] = useState({
@@ -86,7 +86,19 @@ const SignUp1 = () => {
           />
         </div>
       );
-    } else return <Spinner />;
+    } else
+      return (
+        <div className=" mb-4">
+          <Select
+            className="basic-single"
+            classNamePrefix="select department"
+            placeholder="Select Department"
+            // defaultValue={getStation(deptData, 1)}
+            options={[]}
+            //  onChange={handleDeptChange}
+          />
+        </div>
+      );
   }
   function renderNSSelect() {
     if (NSData?.length > 0) {

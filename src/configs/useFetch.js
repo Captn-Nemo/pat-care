@@ -7,7 +7,7 @@ function useFetch(url) {
   const [error, setError] = useState(null);
 
   const getData = async () => {
-    setLoading("loading...");
+    setLoading(true);
     axios
       .get(url)
       .then((res) => {
