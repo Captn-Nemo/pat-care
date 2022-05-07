@@ -2,7 +2,14 @@ import Axios from "axios";
 import MaterialTable from "material-table";
 import React, { useState } from "react";
 
+const roles = {
+  ADMIN: "ADMIN",
+  PATIENT: "PATIENT",
+};
+
 const TableGenerator = ({
+  statusButton = false,
+  isLoading = false,
   title,
   columns,
   data,
@@ -13,12 +20,14 @@ const TableGenerator = ({
   disableActions = false,
   forwardButton = false,
   forwardToStation,
+  changeStatus,
   allotTimeFn,
   customPage = 0,
   allotTime = false,
 }) => {
   const [tdata, setTData] = useState(data);
-
+  const userRole = localStorage.getItem("userRole");
+  const isStatus = userRole === roles.ADMIN && statusButton;
   const handleRowDelete = (oldData, resolve) => {
     Axios.delete(`${url}/${oldData.Id}`)
       .then((res) => {
@@ -37,7 +46,15 @@ const TableGenerator = ({
     <MaterialTable
       columns={columns}
       data={tdata}
+      isLoading={isLoading}
       actions={[
+        (rowData) => ({
+          hidden: !isStatus,
+          icon: rowData.StatusId == 0 ? "checkCircle" : "close",
+          tooltip: "mark as completed",
+          iconProps: { color: "success" },
+          onClick: (event, rowData) => changeStatus(rowData),
+        }),
         {
           hidden: !forwardButton,
           icon: "forward",
@@ -59,12 +76,7 @@ const TableGenerator = ({
           iconProps: { color: "primary" },
           onClick: (event, rowData) => onEditClick(rowData),
         },
-        // (rowData) => ({
-        //   icon: "delete",
-        //   tooltip: "Delete",
-        //   iconProps: { color: "error" },
-        //   onClick: (event, rowData) => onDeleteClick(rowData.Id),
-        // }),
+
         {
           hidden: disableActions,
           icon: "refresh",

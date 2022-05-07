@@ -5,6 +5,7 @@ import BTable from "../../Tables/BTable";
 import StationToStation from "./StationToStation";
 import OneSignal from "react-onesignal";
 import CompletedConcerns from "./Concerns/Completed";
+import PendingConcerns from "./Concerns/Pending";
 export const colourOptions = [
   { value: "Dept", label: "Ocean", color: "#00B8D9" },
   { value: "blue", label: "Blue", color: "#0052CC" },
@@ -37,7 +38,7 @@ const NursingStations = () => {
         <Col md={10} xl={10}>
           <Tabs variant="pills" defaultActiveKey="pending" className="mb-3">
             <Tab eventKey="pending" title="Pending Concenrs">
-              <CompletedConcerns />
+              <PendingConcerns />
             </Tab>
             <Tab eventKey="completed" title="Completed Concerns">
               <CompletedConcerns />

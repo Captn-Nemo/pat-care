@@ -23,6 +23,7 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
   const [rowData, setRowData] = useState(null);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(null);
+  const [Tloading, setTLoading] = useState(null);
   const [error, setError] = useState(null);
   const [DID, setDID] = useState(0);
   const [NC, setNC] = useState(0);
@@ -31,7 +32,8 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
   const getApiData = () => {
     let deptID = dept.value == NS_DEPT ? 0 : dept.value;
     let NSID = deptID == 0 ? NS.value : 0;
-    let status = 0;
+    let status = 1;
+    let dummy = 0;
     setLoading(true);
     setDID(deptID);
     setNC(NSID);
@@ -39,7 +41,7 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
     setError(null);
     if (isRoom) {
       axios
-        .get(`${BOOKING}/${roomId}`)
+        .get(`${BOOKING}/${roomId}/${status}`)
         .then((res) => {
           setData(res.data);
           setLoading(null);
@@ -50,7 +52,7 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
         });
     } else {
       axios
-        .get(`${BOOKING}/${deptID}/${NSID}/${status}`)
+        .get(`${BOOKING}/${deptID}/${NSID}/${status}/${dummy}`)
         .then((res) => {
           setLoading(false);
           setData(res.data);
@@ -76,6 +78,23 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
     setRowData(rowData);
   };
 
+  const changeStatus = (rowData) => {
+    console.log(rowData);
+    let status = 0;
+    let dummy = 0;
+    setTLoading(true);
+    axios
+      .put(`${BOOKING}/${rowData.Id}/${status}/${dummy}`)
+      .then((res) => {
+        setTLoading(false);
+        getApiData();
+      })
+      .catch((err) => {
+        setTLoading(false);
+        alert("An error occurred. Awkward..");
+      });
+  };
+
   //Rendering the Table based on the Data from API
   function rendertable() {
     if (error) {
@@ -88,6 +107,8 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
         <Row>
           <Col>
             <TableGenerator
+              statusButton={true}
+              isLoading={Tloading}
               columns={CONCERNS_TABLE}
               data={data}
               onDeleteClick={() => alert("Delete")}
@@ -96,6 +117,7 @@ const CompletedConcerns = ({ isRoom = false, roomId = null }) => {
               title="Completed Concerns"
               url={BOOKING}
               disableActions
+              changeStatus={changeStatus}
               allotTime={dept.value == LAB_DEPT ? true : false}
               allotTimeFn={allotTimeFn}
               forwardButton={DID == 0 ? true : false}
