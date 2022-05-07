@@ -25,9 +25,14 @@ import useFetch from "../../../../configs/useFetch";
 import { useAxios } from "../../../../configs/useAxios";
 import MaterialTable from "material-table";
 import CustomResponseMessage from "../../../../App/components/CustomResponseMessage";
-import { getStation, dropDownvalues } from "../../../../configs/helpers";
+import {
+  getStation,
+  dropDownvalues,
+  getRooms,
+} from "../../../../configs/helpers";
 import axios from "axios";
 import moment from "moment";
+
 const AssignRooms = () => {
   const { data: NSData, loading: ns, error: two, getData: fn1 } = useFetch(
     NURSINGSTATIONS
@@ -45,7 +50,6 @@ const AssignRooms = () => {
   };
 
   const dept = JSON.parse(localStorage.getItem("dept"));
-  console.log(dept);
   const [NSID, setNSID] = useState(0);
   const [info, setInfo] = useState(true);
   const [data, setData] = useState([]);
@@ -53,9 +57,34 @@ const AssignRooms = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errMessage, setErrMessage] = useState("");
+  const [currentNS, setCurrentNS] = useState(null);
+  const [rooms, setRooms] = useState([]);
+
+  const STATUS = 0;
+
+  const loadRooms = async (item) => {
+    setLoading(true);
+    setData([]);
+    console.log(currentNS);
+    await axios
+      .get(`${GET_ASSIGNED_ROOMS}/${item.value}/${STATUS}`)
+      .then((res) => {
+        console.log(res.data);
+
+        // console.log();
+        setData(getRooms(res.data));
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
 
   const handleCatChange = (item) => {
     setNSID(item.value);
+    console.log(item);
+    setCurrentNS(item);
+    loadRooms(item);
   };
   const handleRoomsChange = (item) => {
     console.log(item);
@@ -69,7 +98,6 @@ const AssignRooms = () => {
       assignedDate: moment().toISOString(),
       assignedBy: dept.value,
     };
-    // return body;
     return axios.post(GET_ASSIGNED_ROOMS, body);
   }
 

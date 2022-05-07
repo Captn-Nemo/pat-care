@@ -212,39 +212,46 @@ const AddRooms = () => {
                   <Card.Title as="h5">Add Room</Card.Title>
                 </Card.Header>
                 <Card.Body>
-                  <Form.Group as={Row} controlId="formPlaintextEmail1">
+                  <Form.Group as={Row}>
                     <Form.Label column sm="3">
                       Code
                     </Form.Label>
                     <Col sm="9">
                       <Form.Control
-                        {...register("code")}
+                        {...register("code", { required: true })}
                         type="text"
                         placeholder="Code"
                         className="mb-3"
                       />
+                      {errors.code && (
+                        <ErrorText msg="This Field is Required" />
+                      )}
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row} controlId="formPlaintextEmail1">
+                  <Form.Group as={Row}>
                     <Form.Label column sm="3">
                       Name
                     </Form.Label>
                     <Col sm="9">
                       <Form.Control
                         type="text"
-                        {...register("name")}
+                        {...register("name", { required: true })}
                         placeholder="Name"
                         className="mb-3"
                       />
+                      {errors.name && (
+                        <ErrorText msg="This Field is Required" />
+                      )}
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row} controlId="formPlaintextEmail1">
+                  <Form.Group as={Row}>
                     <Form.Label column sm="3">
                       Category
                     </Form.Label>
                     <Col sm="9">
                       <Controller
                         name="categoryId"
+                        rules={{ required: true }}
                         control={control}
                         render={({ onChange, value, name, ref }) => (
                           <Select
@@ -260,35 +267,44 @@ const AddRooms = () => {
                           />
                         )}
                       />
+                      {errors.categoryId && (
+                        <ErrorText msg="This Field is Required" />
+                      )}
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row} controlId="formPlaintextEmail1">
+                  <Form.Group as={Row}>
                     <Form.Label column sm="3">
                       Floor
                     </Form.Label>
                     <Col sm="9">
                       <Form.Control
                         type="text"
-                        {...register("floor")}
+                        {...register("floor", { required: true })}
                         placeholder="Name"
                         className="mb-3"
                       />
+                      {errors.floor && (
+                        <ErrorText msg="This Field is Required" />
+                      )}
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row} controlId="formPlaintextEmail1">
+                  <Form.Group as={Row}>
                     <Form.Label column sm="3">
                       Section
                     </Form.Label>
                     <Col sm="9">
                       <Form.Control
                         type="text"
-                        {...register("section")}
+                        {...register("section", { required: true })}
                         placeholder="Name"
                         className="mb-3"
                       />
+                      {errors.section && (
+                        <ErrorText msg="This Field is Required" />
+                      )}
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row} controlId="formPlaintextEmail1">
+                  <Form.Group as={Row}>
                     <Form.Label column sm="3">
                       Notes
                     </Form.Label>
@@ -300,13 +316,13 @@ const AddRooms = () => {
                       />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row} controlId="formPlaintextEmail1">
+                  <Form.Group as={Row}>
                     <Form.Label column sm="3"></Form.Label>
                     <Col sm="9">
                       <Row>
                         <Col>
                           <Button
-                            type="submite"
+                            type="submit"
                             onClick={handleSubmit(onSubmit)}
                             className="shadow-5"
                             block

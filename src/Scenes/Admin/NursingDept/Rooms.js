@@ -28,7 +28,7 @@ export const Rooms = () => {
   const [modal, setModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentRoom, setCurrentRoom] = useState({});
-  const [vote, setVote] = useState(0);
+  const [vote, setVote] = useState(1);
   const [info, setInfo] = useState(true);
   const [selected, setSelected] = useState(5);
 
@@ -47,32 +47,37 @@ export const Rooms = () => {
     setModal(true);
   };
 
-  const openCheckoutModal = () => {
+  const openCheckoutModal = (room) => {
+    setCurrentRoom(room);
     setOpen(true);
   };
-
+  console.log(postData);
   // Function For Updating The Vote and Checkout
-  const Checkout = () => {
+  const Checkout = (rid) => {
+    let roomId = parseInt(rid);
+    console.log(roomId);
     setInfo(true);
-    const body = { id: 0, InOrOut: 2, Vote: vote };
+    const body = { Id: roomId, InOrOut: 2, Vote: vote };
     apiRqst({
       method: "PUT",
       url: CHECKOUT,
       data: body,
     })
-      .then(() => {
+      .then((res) => {
         setTimeout(() => {
-          setOpen(false);
+          getData();
           setInfo(false);
+          setOpen(false);
         }, 1000);
         alert("Successfully checked out");
       })
       .catch(() => {
         setOpen(false);
         setInfo(false);
-        alert("Successfully checked out");
+        alert("Error Checking out");
       });
   };
+  console.log(currentRoom);
   const renderRooms = () => {
     if (error) {
       return <RetryButton retryFn={getData} />;
@@ -105,14 +110,14 @@ export const Rooms = () => {
                                 roomData={room}
                                 patientData={patientDetails}
                                 isRoomAvail={roomData}
-                                onCheckout={openCheckoutModal}
+                                onCheckout={() => openCheckoutModal(room)}
                                 onClickConcern={() => openModal(room)}
                               />
                             ) : (
                               <CustomMenu
                                 roomData={room}
                                 isRoomAvail={roomData}
-                                onCheckout={openCheckoutModal}
+                                onCheckout={() => openCheckoutModal(room)}
                                 onClickConcern={() => openModal(room)}
                               />
                             )}
@@ -205,7 +210,7 @@ export const Rooms = () => {
           </Card.Body>
           <Card.Footer className="text-center">
             <button
-              onClick={() => Checkout()}
+              onClick={() => Checkout(currentRoom.Name)}
               className="btn btn-theme2 md-close"
             >
               Submit and Checkout
@@ -221,8 +226,6 @@ export const Rooms = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title as="h6">Room No : {currentRoom.Name}</Modal.Title>
-
-          {/* {JSON.stringify(currentRoom)} */}
         </Modal.Header>
         <Modal.Body>
           <Tabs defaultActiveKey="pending">

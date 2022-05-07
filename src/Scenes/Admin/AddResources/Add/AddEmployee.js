@@ -75,7 +75,7 @@ const AddEmployee = () => {
 
   const onSubmit = (formdata) => {
     console.log(formdata);
-    // AddNewEmployee(formdata);
+    AddNewEmployee(formdata);
   };
 
   //Getting Dept Data from Backend
@@ -97,7 +97,6 @@ const AddEmployee = () => {
     setValue("nursingStation", rowData.NursingStation);
     setValue("designation", rowData.Designation);
     setValue("address", rowData.Address);
-    setValue("photo", rowData.Photo);
     setValue("remarks", rowData.Remarks);
     setOpen(true);
   };
@@ -112,7 +111,6 @@ const AddEmployee = () => {
     setValue("nursingStation", "");
     setValue("designation", "");
     setValue("address", "");
-    setValue("photo", "");
     setValue("remarks", "");
     clearErrors();
   };
@@ -183,9 +181,11 @@ const AddEmployee = () => {
         method: "PUT",
         url: EMPLOYEE,
         data: body,
-      }).then(() => {
-        getApiData();
-      });
+      })
+        .then(() => {
+          getApiData();
+        })
+        .catch((err) => console.log(err));
     } else {
       const body = { ...apiData, Id: 0 };
       apiRqst({
@@ -327,7 +327,7 @@ const AddEmployee = () => {
                         />
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
+                    {/* <Form.Group as={Row} controlId="formPlaintextEmail1">
                       <Form.Label column sm="3">
                         Photo
                       </Form.Label>
@@ -354,7 +354,7 @@ const AddEmployee = () => {
                           className="hidden"
                         />
                       </Col>
-                    </Form.Group>
+                    </Form.Group> */}
                     <Form.Group as={Row} controlId="formPlaintextEmail1">
                       <Form.Label column sm="3">
                         Remarks

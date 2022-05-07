@@ -1,7 +1,7 @@
 {
   "name": "datta-able-rv18.0.4",
   "version": "0.1.0",
-  "proxy": "http://259f-2409-4073-200a-8fb7-69b1-b762-f1d8-6fa6.ngrok.io/",
+  "proxy": "http://2994-2409-4073-4d85-d7f5-38d8-fd76-dbda-4516.ngrok.io/",
   "homepage": ".",
   "dependencies": {
     "@amcharts/amcharts3-react": "^3.1.0",

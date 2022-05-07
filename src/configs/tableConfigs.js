@@ -8,10 +8,10 @@ export const HOSPITAL_TABLE = [
     title: "Address",
     field: "Address",
   },
-  {
-    title: "Logo",
-    field: "Logo",
-  },
+  // {
+  //   title: "Logo",
+  //   field: "Logo",
+  // },
 ];
 export const DEPARTMENT_TABLE = [
   { title: "ID", field: "Id" },
@@ -30,10 +30,10 @@ export const USERS = [
     title: "E mail",
     field: "Email",
   },
-  {
-    title: "Password",
-    field: "Password",
-  },
+  // {
+  //   title: "Password",
+  //   field: "Password",
+  // },
   {
     title: "User Group",
     field: "userGroup",
@@ -86,16 +86,16 @@ export const EMPLOYEE_TABLE = [
     title: "Address",
     field: "Address",
   },
-  {
-    title: "photo",
-    field: "photo",
-    render: (rowData) => (
-      <img
-        src={"https://avatars0.githubusercontent.com/u/7895451?s=460&v=4"}
-        style={{ width: 40, borderRadius: "50%" }}
-      />
-    ),
-  },
+  // {
+  //   title: "photo",
+  //   field: "photo",
+  //   render: (rowData) => (
+  //     <img
+  //       src={"https://avatars0.githubusercontent.com/u/7895451?s=460&v=4"}
+  //       style={{ width: 40, borderRadius: "50%" }}
+  //     />
+  //   ),
+  // },
   {
     title: "remarks",
     field: "remarks",
@@ -128,27 +128,27 @@ export const FOOD_ITEMS_TABLE = [
     title: "Description",
     field: "Description",
   },
-  {
-    title: "photo",
-    field: "imagePath",
-    render: (rowData) => {
-      if (rowData.imgPath) {
-        return (
-          <img
-            src={rowData.imgPath}
-            style={{ width: 40, borderRadius: "50%" }}
-          />
-        );
-      } else {
-        return (
-          <img
-            src={"https://via.placeholder.com/150"}
-            style={{ width: 40, borderRadius: "50%" }}
-          />
-        );
-      }
-    },
-  },
+  // {
+  //   title: "photo",
+  //   field: "imagePath",
+  //   render: (rowData) => {
+  //     if (rowData.imgPath) {
+  //       return (
+  //         <img
+  //           src={rowData.imgPath}
+  //           style={{ width: 40, borderRadius: "50%" }}
+  //         />
+  //       );
+  //     } else {
+  //       return (
+  //         <img
+  //           src={"https://via.placeholder.com/150"}
+  //           style={{ width: 40, borderRadius: "50%" }}
+  //         />
+  //       );
+  //     }
+  //   },
+  // },
 ];
 
 export const DIET_HEADER_TABLE = [

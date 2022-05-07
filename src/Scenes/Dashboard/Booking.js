@@ -30,6 +30,7 @@ const severityEmojis = [
 ];
 
 const Booking = ({ onCancel, category, data }) => {
+  console.log(category);
   const categorySelected = data.findIndex(
     (service) => service.Id === category.Id
   );
@@ -108,13 +109,20 @@ const Booking = ({ onCancel, category, data }) => {
                   Departments
                 </Form.Label>
                 <Col sm="9">
-                  <Select
+                  {/* <Select
                     className="basic-single"
                     classNamePrefix="select"
                     defaultValue={dropDownvalues(data)[categorySelected]}
                     name="color"
                     options={dropDownvalues(data)}
                     onChange={(newVAL) => setDept(newVAL.label)}
+                  /> */}
+
+                  <Form.Control
+                    type="text"
+                    disabled={true}
+                    value={category.Name}
+                    className="mb-3"
                   />
                 </Col>
               </Form.Group>

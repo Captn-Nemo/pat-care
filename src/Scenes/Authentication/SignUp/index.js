@@ -21,6 +21,7 @@ const SignUp1 = () => {
   const [phn, setPhn] = useState("");
   const [otp, setOtp] = useState("");
   const [otpStatus, setOtpStatus] = useState(false);
+  const [otpError, setOtpError] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,8 +35,8 @@ const SignUp1 = () => {
   } = useForm();
 
   const onSubmit = (formdata, e) => {
-    RequestOTP(e, formdata.mobileNo);
-    // submitUserData();
+    // RequestOTP(e, formdata.mobileNo);
+    submitUserData();
   };
 
   const submitUserData = () => {
@@ -52,6 +53,7 @@ const SignUp1 = () => {
           .then((res) => {
             console.log(res);
             localStorage.setItem("byStanderId", res.data);
+            localStorage.setItem("userRole", "PATIENT");
             localStorage.setItem("isAuthed", true);
             setLoading(false);
             dispatch(ChangeAuthType("PATIENT"));
@@ -127,8 +129,12 @@ const SignUp1 = () => {
         .catch((error) => {
           // User couldn't sign in (bad verification code?)
           // ...
+          setOtpError(true);
           setLoading(false);
         });
+    } else {
+      setOtpError(true);
+      setLoading(false);
     }
   };
 
@@ -211,7 +217,7 @@ const SignUp1 = () => {
                   placeholder="By Stander Name"
                 />
               </div> */}
-              {!otpStatus && (
+              {otpStatus && (
                 <div className="input-group mb-2 d-flex justify-content-center">
                   <button
                     // disabled={Object.keys(errors).length > 0}
@@ -224,12 +230,12 @@ const SignUp1 = () => {
                 </div>
               )}
 
-              {otpStatus && (
+              {!otpStatus && (
                 <div className="input-group mb-2 d-flex justify-content-center">
                   <button
                     disabled={otpStatus === ""}
                     // onClick={(e) => handleSubmit(onSubmit, e)}
-                    onClick={(e) => onSubmitOTP(e)}
+                    onClick={handleSubmit(onSubmit)}
                     className="btn btn-primary shadow-2 mb-4 mr-4"
                   >
                     {loading ? "Please wait ..." : "Register"}
@@ -249,9 +255,15 @@ const SignUp1 = () => {
                       type="text"
                       className="form-control"
                       placeholder="Enter the OTP Here"
-                      onChange={(e) => setOtp(e.target.value)}
+                      onChange={(e) => {
+                        setOtpError(false);
+                        setOtp(e.target.value);
+                      }}
                     />
                   </div>
+                  {otpError && (
+                    <p className="text-danger">Please Enter a Correct OTP</p>
+                  )}
                 </>
               )}
               {/* <p className="mb-0 text-muted">

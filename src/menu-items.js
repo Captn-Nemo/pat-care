@@ -29,14 +29,14 @@ export default {
           url: "/admin/add",
           // target: true,
         },
-        {
-          id: "diet",
-          title: "Diet",
-          type: "item",
-          icon: "feather icon-list",
-          url: "/admin/diets",
-          // target: true
-        },
+        // {
+        //   id: "diet",
+        //   title: "Diet",
+        //   type: "item",
+        //   icon: "feather icon-list",
+        //   url: "/admin/diets",
+        //   // target: true
+        // },
       ],
     },
   ],

@@ -22,6 +22,7 @@ import axios from "axios";
 import Notifications from "../../../../App/components/Notifications";
 import CustomResponseMessage from "../../../../App/components/CustomResponseMessage";
 import { RESPONSETYPES } from "../../../../constants";
+import Asterisk from "../../../../App/components/Asterisk";
 
 const AddDesignation = () => {
   const {
@@ -30,7 +31,13 @@ const AddDesignation = () => {
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      name: "",
+      code: "",
+      notes: "",
+    },
+  });
 
   const [open, setOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -63,9 +70,9 @@ const AddDesignation = () => {
     setInfo(false);
     setEditMode(false);
     setOpen(false);
-    setValue("Name", "");
-    setValue("Code", "");
-    setValue("Notes", "");
+    setValue("name", "");
+    setValue("code", "");
+    setValue("notes", "");
     clearErrors();
   };
 
@@ -108,9 +115,9 @@ const AddDesignation = () => {
   const changeToEditMode = (rowData) => {
     setEditMode(true);
     setId(rowData.Id);
-    setValue("Code", rowData.Code);
-    setValue("Name", rowData.Name);
-    setValue("Notes", rowData.Notes);
+    setValue("code", rowData.Code);
+    setValue("name", rowData.Name);
+    setValue("notes", rowData.Notes);
     setOpen(true);
   };
 
@@ -167,11 +174,11 @@ const AddDesignation = () => {
                   <Card.Body>
                     <Form.Group as={Row} controlId="formPlaintextEmail1">
                       <Form.Label column sm="3">
-                        Code
+                        Code <Asterisk />
                       </Form.Label>
                       <Col sm="9">
                         <Form.Control
-                          {...register("Code", { required: true })}
+                          {...register("code", { required: true })}
                           type="text"
                           placeholder="Code"
                           className="mb-3"
@@ -183,11 +190,11 @@ const AddDesignation = () => {
                     </Form.Group>
                     <Form.Group as={Row} controlId="formPlaintextEmail1">
                       <Form.Label column sm="3">
-                        Name
+                        Name <Asterisk />
                       </Form.Label>
                       <Col sm="9">
                         <Form.Control
-                          {...register("Name", { required: true })}
+                          {...register("name", { required: true })}
                           type="text"
                           placeholder="Name"
                           className="mb-3"
@@ -203,14 +210,11 @@ const AddDesignation = () => {
                       </Form.Label>
                       <Col sm="9">
                         <Form.Control
-                          {...register("Notes", { required: true })}
+                          {...register("Notes")}
                           as="textarea"
                           rows="4"
                           placeholder="Notes"
                         />
-                        {errors.notes && (
-                          <ErrorText msg="This Field is Required" />
-                        )}
                       </Col>
                     </Form.Group>
 

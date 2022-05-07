@@ -189,7 +189,7 @@ const AddUser = () => {
                     <Card.Title as="h5">Add User</Card.Title>
                   </Card.Header>
                   <Card.Body>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
+                    <Form.Group as={Row}>
                       <Form.Label column sm="3">
                         First Name
                       </Form.Label>
@@ -206,7 +206,7 @@ const AddUser = () => {
                         )}
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
+                    <Form.Group as={Row}>
                       <Form.Label column sm="3">
                         Last Name
                       </Form.Label>
@@ -219,7 +219,7 @@ const AddUser = () => {
                         />
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
+                    <Form.Group as={Row}>
                       <Form.Label column sm="3">
                         Email
                       </Form.Label>
@@ -235,14 +235,14 @@ const AddUser = () => {
                         )}
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
+                    <Form.Group as={Row}>
                       <Form.Label column sm="3">
                         Password
                       </Form.Label>
                       <Col sm="9">
                         <Form.Control
                           {...register("password", { required: true })}
-                          type="text"
+                          type="password"
                           placeholder="Enter Password"
                           className="mb-3"
                         />
@@ -251,7 +251,7 @@ const AddUser = () => {
                         )}
                       </Col>
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
+                    <Form.Group as={Row}>
                       <Form.Label column sm="3">
                         User Role
                       </Form.Label>
@@ -270,7 +270,7 @@ const AddUser = () => {
                         </Col>
                       )}
                     </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
+                    <Form.Group as={Row}>
                       <Form.Label column sm="3"></Form.Label>
                       <Col sm="9">
                         <Row>

@@ -20,7 +20,7 @@ import FoodList from "../../Dashboard/FoodList";
 import Axios from "axios";
 import { DIET_DETAILS, DIET_HEADER } from "../../../configs/apiRoutes";
 
-const AddDiet = () => {
+const AddDiet = ({ editMode = false, diet = {} }) => {
   const {
     register,
     handleSubmit,
@@ -29,12 +29,12 @@ const AddDiet = () => {
     control,
     clearErrors,
     formState: { errors },
-  } = useForm({ code: "", name: "", diningTime: "" });
+  } = useForm();
 
   const [modal, setModal] = useState(false);
   const [foodItems, setFoodItems] = useState([]);
   const [diningTime, setDiningTime] = useState("");
-  const [headerId, setHeaderId] = useState("");
+  const [headerId, setHeaderId] = useState(0);
   const [info, setInfo] = useState(true);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(null);
@@ -49,6 +49,50 @@ const AddDiet = () => {
     apiRqst,
   } = useAxios();
 
+  function convertData(data) {
+    return data.map((item) => {
+      return {
+        itemId: item.ItemId,
+        itemName: item.ItemName,
+        description: "",
+        checked: true,
+      };
+    });
+  }
+
+  const updateFormFields = () => {
+    setValue("code", diet.Code);
+    setValue("name", diet.Name);
+    setValue("diningTime", diet.DiningTime);
+  };
+  useEffect(() => {
+    setLoading(true);
+    updateFormFields();
+    if (editMode) {
+      setHeaderId(diet.Id);
+      Axios.get(`${DIET_DETAILS}/${diet.Id}/HeaderId`)
+        .then((res) => {
+          console.log(res.data);
+          let data = convertData(res.data);
+          setFoodItems(data);
+          setHeaderId(diet.Id);
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError(true);
+          setErrMsg("An error occurred. Awkward..");
+        });
+    }
+  }, []);
+
+  const getDinignTime = (id) => {
+    // let diningTime = getValues("diningTime");
+    let dn = DINING_TIMES.filter((d) => d.value == id);
+    console.log(dn);
+    return dn[0];
+  };
+
   function make_api_call(header, foodId) {
     let body = {
       dietHeaderId: header,
@@ -56,14 +100,18 @@ const AddDiet = () => {
     };
     console.log(body);
     // return body;
-    return Axios.post(DIET_DETAILS, body);
+    if (editMode) {
+      console.log("inside edit mode");
+      return Axios.put(DIET_DETAILS, body);
+    } else return Axios.post(DIET_DETAILS, body);
   }
 
-  async function processUsers(headerId) {
+  async function processUsers(Id) {
+    let HID = editMode ? headerId : Id;
     let result;
     let list = [];
     for (let i = 0; i < foodItems.length; i++) {
-      result = await make_api_call(headerId, foodItems[i].itemId);
+      result = await make_api_call(HID, foodItems[i].itemId);
       list[i] = result;
     }
     console.log(list);
@@ -72,11 +120,36 @@ const AddDiet = () => {
 
   const onSubmit = async (formdata) => {
     setSuccess(false);
-    console.log(formdata);
     if (foodItems.length === 0) {
       setError(true);
       setErrMsg("Please select One food item");
       return;
+    } else if (editMode) {
+      setLoading(true);
+      setInfo(true);
+      setError(false);
+      Axios.put(DIET_HEADER, { id: headerId, ...formdata })
+        .then((res) => {
+          console.log(res);
+          let result = processUsers(headerId)
+            .then((res) => {
+              setError(false);
+              setSuccess(true);
+              setSuccessMsg("Diet Updated Successfully");
+              console.log(res);
+              setLoading(false);
+            })
+            .catch((err) => {
+              setLoading(false);
+              setError(true);
+              setErrMsg(err.message);
+            });
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError(true);
+          setErrMsg(err.message);
+        });
     } else {
       setLoading(true);
       setInfo(true);
@@ -214,6 +287,7 @@ const AddDiet = () => {
                   className="basic-single"
                   classNamePrefix="select"
                   options={DINING_TIMES}
+                  defaultValue={editMode && getDinignTime(diet.DiningTime)}
                   onChange={handleDiningChange}
                 />
               </Col>

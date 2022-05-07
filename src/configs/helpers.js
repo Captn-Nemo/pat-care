@@ -9,3 +9,14 @@ export function dropDownvalues(data) {
     return { label: item.Name, value: item.Id };
   });
 }
+
+export const getRooms = (roomData) => {
+  let rooms = roomData.map((room) => {
+    return {
+      label: room.Name,
+      value: room.RoomId,
+    };
+  });
+
+  return rooms;
+};

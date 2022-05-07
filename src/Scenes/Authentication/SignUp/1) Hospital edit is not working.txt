@@ -1,0 +1,19 @@
+🟢1) Hospital edit is not working 
+🟢1) Password in User screen must be a Password field, and in list it must be avoid
+🟢3) Assigned rooms => Need to show assigned rooms
+🟢4) Room not saving,
+🟢5) Not able to edit room
+🔴6) Designation is not saving without entering Notes
+    🟢6.1 Designation CRUD working
+    🔴6.1  Designation API Not returning code, notes fields in the GET Response
+🔴7) Employee is not saving
+    🟢CRUD Working but following condition
+    🔴7.1 address and remarks field of post api is treated as integer please check it, i have to pass 0 in address inorder make the api working
+🟢8) Code is not saving in item
+🟢9) Need to change Diet screen
+🟢10) While registering, if wrong otp is entred, system stuck
+🟢11) While booking once selected department shouldn't changed
+🟢11) My orderes is not showing
+🟢13) Rooms clor is not changing
+🟢14) View concerns from "Rooms" is empty
+🟢11) Discharge is not working

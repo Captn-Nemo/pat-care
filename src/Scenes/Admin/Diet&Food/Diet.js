@@ -22,10 +22,12 @@ import { DINING_TIMES, RESPONSETYPES } from "../../../constants";
 import TableGenerator from "../../../App/components/TableGenerator";
 import Select from "react-select";
 import { getStation } from "../../../configs/helpers";
+import AddDiet from "./AddDiet";
 const Diet = () => {
   const {
     register,
     handleSubmit,
+    getValues,
     setValue,
     control,
     clearErrors,
@@ -34,6 +36,7 @@ const Diet = () => {
 
   const [open, setOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [diet, setDiet] = useState({});
   const [ID, setId] = useState("");
   const [info, setInfo] = useState(true);
   const [data, setData] = useState(null);
@@ -65,7 +68,7 @@ const Diet = () => {
     setOpen(false);
     setValue("name", "");
     setValue("code", "");
-    setValue("notes", "");
+    setValue("diningTime", "");
     clearErrors();
   };
 
@@ -89,7 +92,7 @@ const Diet = () => {
         getApiData();
       });
     } else {
-      const body = { ...apiData, Id: 0 };
+      const body = { ...apiData };
       apiRqst({
         method: "POST",
         url: DIET_HEADER,
@@ -106,16 +109,11 @@ const Diet = () => {
   };
 
   const changeToEditMode = (rowData) => {
+    console.log(rowData);
+    setDiet(rowData);
     setEditMode(true);
     setId(rowData.Id);
-    setValue("code", rowData.Code);
-    setValue("name", rowData.Name);
-    setValue("diningTime", rowData.Notes);
     setOpen(true);
-  };
-
-  const handleDiningChange = (item) => {
-    setValue("diningTime", item.value);
   };
 
   //Rendering the Table based on the Data from API
@@ -158,113 +156,25 @@ const Diet = () => {
           <CustomResponseMessage type={RESPONSETYPES.ERROR} />
         ) : null}
         <Modal.Body>
-          <Row className="justify-content-md-center">
-            <Col>
-              <form>
-                <Card>
-                  <Card.Header>
-                    <Card.Title as="h5">Update Diet</Card.Title>
-                  </Card.Header>
-                  <Card.Body>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
-                      <Form.Label column sm="3">
-                        Code
-                      </Form.Label>
-                      <Col sm="9">
-                        <Form.Control
-                          {...register("code", {
-                            required: true,
-                          })}
-                          type="text"
-                          placeholder="Code"
-                          className="mb-3"
-                        />
-                        {errors.code && (
-                          <ErrorText msg="This Field is Required" />
-                        )}
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
-                      <Form.Label column sm="3">
-                        Name
-                      </Form.Label>
-                      <Col sm="9">
-                        <Form.Control
-                          {...register("name", {
-                            required: true,
-                          })}
-                          type="text"
-                          placeholder="Name"
-                          className="mb-3"
-                        />
-                        {errors.name && (
-                          <ErrorText msg="This Field is Required" />
-                        )}
-                      </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
-                      <Form.Label column sm="3">
-                        Notes
-                      </Form.Label>
-                      <Col sm="9">
-                        <Controller
-                          name="diningTime"
-                          control={control}
-                          render={({ onChange, value, name, ref }) => (
-                            <Select
-                              className="basic-single"
-                              classNamePrefix="select"
-                              inputRef={ref}
-                              // defaultValue={
-                              //   editMode &&
-                              //   getStation(data, getValues("diningTime"))
-                              // }
-                              options={DINING_TIMES}
-                              onChange={handleDiningChange}
-                            />
-                          )}
-                        />
-                      </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row} controlId="formPlaintextEmail1">
-                      <Form.Label column sm="3"></Form.Label>
-                      <Col sm="9">
-                        <Row>
-                          <Col>
-                            <Button
-                              type="submite"
-                              onClick={handleSubmit(onSubmit)}
-                              className="shadow-5"
-                              block
-                              variant="primary"
-                            >
-                              {postLoading ? "wait ..." : "submit"}
-                            </Button>
-                          </Col>
-                          <Col>
-                            <Button
-                              block
-                              className="shadow-5"
-                              variant="danger"
-                              onClick={() => {
-                                clearOutFn();
-                              }}
-                            >
-                              Cancel
-                            </Button>
-                          </Col>
-                        </Row>
-                      </Col>
-                    </Form.Group>
-                  </Card.Body>
-                </Card>
-              </form>
-            </Col>
-          </Row>
+          <Card>
+            <Card.Header className="mb-4">
+              <Card.Title as="h5">
+                {" "}
+                {editMode ? "Update Diet" : "Add Diet"}
+              </Card.Title>
+            </Card.Header>
+            <AddDiet editMode={editMode} diet={diet} />
+          </Card>
         </Modal.Body>
       </Modal>
-
+      <Row className="mb-3">
+        <Col>
+          <Button onClick={() => setOpen(true)}>
+            <i className="feather icon-plus" />
+            Add Diet
+          </Button>
+        </Col>
+      </Row>
       {rendertable()}
     </>
   );

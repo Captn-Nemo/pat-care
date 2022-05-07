@@ -113,7 +113,7 @@ const AddHospital = () => {
     console.log(apiData);
     setInfo(true);
     if (editMode) {
-      const body = { ...apiData, Id: ID, logo: "" };
+      const body = { ...apiData, Id: ID };
       apiRqst({
         method: "PUT",
         url: HOSPITAL,
@@ -122,7 +122,7 @@ const AddHospital = () => {
         getApiData();
       });
     } else {
-      const body = { ...apiData, logo: "" };
+      const body = { ...apiData };
       apiRqst({
         method: "POST",
         url: HOSPITAL,

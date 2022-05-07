@@ -1,14 +1,10 @@
 import React from "react";
-import { Row, Col, Card, Form, Tabs, Tab } from "react-bootstrap";
+import { Row, Col, Tabs, Tab } from "react-bootstrap";
 import * as Add from "./Add/index";
-import useFetch from "../../../configs/useFetch";
-import {
-  DEPARTMENTS,
-  DESIGNATION,
-  NURSINGSTATIONS,
-} from "../../../configs/apiRoutes";
-import { useDispatch } from "react-redux";
-import { addDeptToStore } from "../../../store/actions";
+import Diet from "../Diet&Food/Diet";
+import AddDiet from "../Diet&Food/AddDiet";
+import FoodItems from "../Diet&Food/FoodItems";
+
 const AdminHome = () => {
   return (
     <>
@@ -41,6 +37,12 @@ const AdminHome = () => {
             </Tab>
             <Tab eventKey="EMP" title="Employees">
               <Add.AddEmployee />
+            </Tab>
+            <Tab eventKey="diet" title="Diet">
+              <Diet />
+            </Tab>
+            <Tab eventKey="FoodItems" title="Food-Items">
+              <FoodItems />
             </Tab>
           </Tabs>
         </Col>
